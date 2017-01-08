@@ -12,6 +12,7 @@ Features
 ~~~~~~~~
 - `#7965 <https://leap.se/code/issues/7965>`_: Add basic keymanagement to the cli.
 - Use mail_auth token in the core instead of imap/smtp tokens.
+- `#3255 <https://leap.se/code/issues/3255>`_: Show units other than KB in VPN status when revevant.
 
 - `#1234 <https://leap.se/code/issues/1234>`_: Description of the new feature corresponding with issue #1234.
 - New feature without related issue number.

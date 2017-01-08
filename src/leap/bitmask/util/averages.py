@@ -72,7 +72,7 @@ class RateMovingAverage(object):
             deltat = 0
 
         try:
-            rate = float(deltatraffic) / float(deltat) / 1024
+            rate = float(deltatraffic) / float(deltat)
         except ZeroDivisionError:
             rate = 0
 
@@ -87,6 +87,6 @@ class RateMovingAverage(object):
         Gets the total accumulated throughput.
         """
         try:
-            return self._data[-1][1] / 1024
+            return self._data[-1][1]
         except TypeError:
             return 0

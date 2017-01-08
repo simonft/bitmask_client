@@ -39,8 +39,6 @@ class EIPStatusWidget(QtGui.QWidget):
     EIP Status widget that displays the current state of the EIP service
     """
     DISPLAY_TRAFFIC_RATES = True
-    RATE_STR = "%1.2f KB/s"
-    TOTAL_STR = "%1.2f Kb"
 
     def __init__(self, parent, eip_conductor, leap_signaler):
         """
@@ -156,8 +154,8 @@ class EIPStatusWidget(QtGui.QWidget):
         self._up_rate = RateMovingAverage()
         self._down_rate = RateMovingAverage()
 
-        self.ui.btnUpload.setText(self.RATE_STR % (0,))
-        self.ui.btnDownload.setText(self.RATE_STR % (0,))
+        self.ui.btnUpload.setText('%s/s' % self._format_bytes(0))
+        self.ui.btnDownload.setText('%s/s' % self._format_bytes(0))
 
     def _reset_traffic_rates(self):
         """
@@ -519,16 +517,38 @@ class EIPStatusWidget(QtGui.QWidget):
 
         if self.DISPLAY_TRAFFIC_RATES:
             uprate, downrate = self._get_traffic_rates()
-            upload_str = self.RATE_STR % (uprate,)
-            download_str = self.RATE_STR % (downrate,)
+            upload_str = '%s/s' % self._format_bytes(uprate)
+            download_str = '%s/s' % self._format_bytes(downrate)
 
         else:  # display total throughput
             uptotal, downtotal = self._get_traffic_totals()
-            upload_str = self.TOTAL_STR % (uptotal,)
-            download_str = self.TOTAL_STR % (downtotal,)
+            upload_str = self._format_bytes(uptotal)
+            download_str = self._format_bytes(downtotal)
 
         self.ui.btnUpload.setText(upload_str)
         self.ui.btnDownload.setText(download_str)
+
+    def _format_bytes(self, _bytes):
+        """
+        Formats a number of bytes in a human readable way. Uses KB, MB,
+        GB, or TB depending on the number of bytes.
+
+        :param _bytes: A float with the number of bytes
+        :type _bytes: float
+        :returns: A formatted string representing the number of bytes
+        :rtype: str
+        """
+        units = ['KB', 'MB', 'GB', 'TB']
+        adjusted_unit = None
+        adjusted_total = _bytes
+
+        for unit in units:
+            adjusted_unit = unit
+            adjusted_total /= 1000
+            if adjusted_total < 1000:
+                break
+
+        return "%1.2f %s" % (adjusted_total, adjusted_unit)
 
     def update_vpn_state(self, vpn_state):
         """
