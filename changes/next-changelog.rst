@@ -20,6 +20,7 @@ Bugfixes
 ~~~~~~~~
 - `#1235 <https://leap.se/code/issues/1235>`_: Description for the fixed stuff corresponding with issue #1235.
 - Bugfix without related issue number.
+- `#8703 <https://leap.se/code/issues/8703>`_: Fix issues connecting to VPN when using openvpn 2.4 #8703.
 
 Misc
 ~~~~

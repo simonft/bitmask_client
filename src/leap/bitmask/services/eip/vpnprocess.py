@@ -653,18 +653,30 @@ class VPNManager(object):
         Parses the output of the state command and emits state_changed
         signal when the state changes.
 
+        As of openvpn 2.4, the return of the state command changes
+        based on what state openvpn is in. Since we only care about
+        the first two fields, and these two are the same no matter the
+        state, only those two are pulled into variables.
+
+        See
+        https://github.com/OpenVPN/openvpn/blob/release/2.4/doc/management-notes.txt
+        for more information.
+        TODO: Change this link to an actual link to the docs when the
+        2.4 version shows up on the openvpn site.
+
         :param output: list of lines that the state command printed as
                        its output
         :type output: list
+
         """
         for line in output:
             stripped = line.strip()
             if stripped == "END":
                 continue
             parts = stripped.split(",")
-            if len(parts) < 5:
+            if len(parts) < 2:
                 continue
-            ts, status_step, ok, ip, remote = parts
+            ts, status_step = parts[:2]
 
             state = status_step
             if state != self._last_state:
